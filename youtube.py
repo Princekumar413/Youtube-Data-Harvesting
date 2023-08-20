@@ -247,12 +247,12 @@ def myfun(channel_id):
 st.title('Youtube Channel Data Anaylsis')
 
 # Define the options for the dropdown menu
-#options = list(range(1,3))
+options = list(range(2,4))
 # Create the dropdown menu
-#selected_option = st.selectbox('Select an option', options)
+selected_option = st.selectbox('Select an option', options)
 
 # Display the selected option
-#st.write('You selected:', selected_option)
+st.write('You selected:', selected_option)
 
 #C=selected_option
 #text_inputs=[]
@@ -274,6 +274,7 @@ st.title('Youtube Channel Data Anaylsis')
 #channel_id = guvi_channel_id
 #st.write(channel_name)
 
+
 def push_mongo_sql_1(all_data):
     from pymongo import MongoClient
 
@@ -284,18 +285,16 @@ def push_mongo_sql_1(all_data):
     x = collection.delete_many({})
 
     collection.insert_one(all_data)
-    #st.write('mongo channel success')
+    # st.write('mongo channel success')
 
-
-    #sql
-    data_list=list(all_data)
+    # sql
+    data_list = list(all_data)
     data = all_data
 
-
-    #for i in range(1, len(data_list)):
+    # for i in range(1, len(data_list)):
     #    st.write(data_list[i])
-    #st.write(data_list)
-    #st.write(data)
+    # st.write(data_list)
+    # st.write(data)
     import mysql.connector
 
     mydb = mysql.connector.connect(
@@ -305,23 +304,22 @@ def push_mongo_sql_1(all_data):
         database="mydatabase"
     )
     mycursor = mydb.cursor()
-    sql = "TRUNCATE TABLE Channel_1"
+    sql = "DELETE FROM Channel_4"
     mycursor.execute(sql)
 
-    sql = "INSERT INTO Channel_1 (channel_id,channel_name,channel_type,channel_views,channel_decription,channel_status) VALUES (%s, %s,%s, %s,%s, %s)"
+    sql = "INSERT INTO Channel_4 (channel_id,channel_name,channel_type,channel_views,channel_decription,channel_status) VALUES (%s, %s,%s, %s,%s, %s)"
     val = (data['Channel_information']['Channel_Id'], data['Channel_information']['Channel_Name'], 'Education',
            data['Channel_information']['Channel_Views'], data['Channel_information']['Channel_Description'], 'active')
     mycursor.execute(sql, val)
 
     mydb.commit()
-    #st.write('sql channel success')
+    # st.write('sql channel success')
 
-
-    sql = "TRUNCATE TABLE Channel_1_Videos"
+    sql = "DELETE FROM Channel_4_Videos"
     mycursor.execute(sql)
 
-    for i in range(1, len(data_list)-1):
-        sql = "INSERT INTO Channel_1_Videos(video_id,playlist_id,video_name ,video_description ,published_date ,view_count,like_count,dislike_count,favorite_count,comment_count,duration,thumbnail,caption_status) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
+    for i in range(1, len(data_list) - 1):
+        sql = "INSERT INTO Channel_4_Videos(video_id,playlist_id,video_name ,video_description ,published_date ,view_count,like_count,dislike_count,favorite_count,comment_count,duration,thumbnail,caption_status) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
         val = (data[data_list[i]]['Video_Id'], 'none', data[data_list[i]]['Video_Name'],
                data[data_list[i]]['Video_Description'], data[data_list[i]]['PublishedAt'],
                data[data_list[i]]['View_Count'], data[data_list[i]]['Like_Count'], 0,
@@ -331,18 +329,18 @@ def push_mongo_sql_1(all_data):
         mycursor.execute(sql, val)
         mydb.commit()
 
-    #st.write('sql Video success')
+    # st.write('sql Video success')
 
-    sql = "TRUNCATE TABLE Channel_1_comments"
+    sql = "DELETE FROM Channel_4_comments"
     mycursor.execute(sql)
 
     for i in range(1, len(data_list) - 1):
         if data[data_list[i]]['Comment_Count'] != 0:
-            y=list(data[data_list[i]]['Comments'].values())
+            y = list(data[data_list[i]]['Comments'].values())
 
             for j in range(len(y)):
-                sql = "INSERT INTO Channel_1_comments (comment_id,video_id,comment_text,comment_author,comment_published_date) VALUES (%s,%s,%s,%s,%s)"
-                val = (y[j]['Comment_Id'],data_list[i],y[j]['Comment_Text'],
+                sql = "INSERT INTO Channel_4_comments (comment_id,video_id,comment_text,comment_author,comment_published_date) VALUES (%s,%s,%s,%s,%s)"
+                val = (y[j]['Comment_Id'], data_list[i], y[j]['Comment_Text'],
                        y[j]['Comment_Author'], y[j]['Comment_PublishedAt'])
                 mycursor.execute(sql, val)
                 mydb.commit()
@@ -352,28 +350,23 @@ def push_mongo_sql_1(all_data):
             pass
 
 
-
-
 if 'text1' not in st.session_state:
-    st.session_state['text1']=None
+    st.session_state['text1'] = None
 
 text_inputs1 = st.text_input('Enter 1st channel id')
 if text_inputs1:
     st.session_state.text1 = text_inputs1
 
-#st.session_state['text']
-fetch1=st.button('fetch and store data of 1st channel in MongoDB and SQL database ')
+# st.session_state['text']
+fetch1 = st.button('fetch and store data of 1st channel in MongoDB and SQL database ')
 
 if fetch1:
-    input_channel1=st.session_state['text1']
+    input_channel1 = st.session_state['text1']
 
-    all_data= myfun(input_channel1)
+    all_data = myfun(input_channel1)
     push_mongo_sql_1(all_data)
 
-
-
-    #st.button('Push to mongo and sql database server ', on_click=push_mongo_sql(all_data))
-
+    # st.button('Push to mongo and sql database server ', on_click=push_mongo_sql(all_data))
 
 
 def push_mongo_sql_2(all_data):
@@ -386,18 +379,16 @@ def push_mongo_sql_2(all_data):
     x = collection.delete_many({})
 
     collection.insert_one(all_data)
-    #st.write('mongo channel success')
+    # st.write('mongo channel success')
 
-
-    #sql
-    data_list=list(all_data)
+    # sql
+    data_list = list(all_data)
     data = all_data
 
-
-    #for i in range(1, len(data_list)):
+    # for i in range(1, len(data_list)):
     #    st.write(data_list[i])
-    #st.write(data_list)
-    #st.write(data)
+    # st.write(data_list)
+    # st.write(data)
     import mysql.connector
 
     mydb = mysql.connector.connect(
@@ -407,23 +398,22 @@ def push_mongo_sql_2(all_data):
         database="mydatabase"
     )
     mycursor = mydb.cursor()
-    sql = "TRUNCATE TABLE Channel_2"
+    sql = "DELETE FROM Channel_5"
     mycursor.execute(sql)
 
-    sql = "INSERT INTO Channel_2 (channel_id,channel_name,channel_type,channel_views,channel_decription,channel_status) VALUES (%s, %s,%s, %s,%s, %s)"
+    sql = "INSERT INTO Channel_5 (channel_id,channel_name,channel_type,channel_views,channel_decription,channel_status) VALUES (%s, %s,%s, %s,%s, %s)"
     val = (data['Channel_information']['Channel_Id'], data['Channel_information']['Channel_Name'], 'Education',
            data['Channel_information']['Channel_Views'], data['Channel_information']['Channel_Description'], 'active')
     mycursor.execute(sql, val)
 
     mydb.commit()
-    #st.write('sql channel success')
+    # st.write('sql channel success')
 
-
-    sql = "TRUNCATE TABLE Channel_2_Videos"
+    sql = "DELETE FROM Channel_5_Videos"
     mycursor.execute(sql)
 
-    for i in range(1, len(data_list)-1):
-        sql = "INSERT INTO Channel_2_Videos(video_id,playlist_id,video_name ,video_description ,published_date ,view_count,like_count,dislike_count,favorite_count,comment_count,duration,thumbnail,caption_status) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
+    for i in range(1, len(data_list) - 1):
+        sql = "INSERT INTO Channel_5_Videos(video_id,playlist_id,video_name ,video_description ,published_date ,view_count,like_count,dislike_count,favorite_count,comment_count,duration,thumbnail,caption_status) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
         val = (data[data_list[i]]['Video_Id'], 'none', data[data_list[i]]['Video_Name'],
                data[data_list[i]]['Video_Description'], data[data_list[i]]['PublishedAt'],
                data[data_list[i]]['View_Count'], data[data_list[i]]['Like_Count'], 0,
@@ -433,18 +423,18 @@ def push_mongo_sql_2(all_data):
         mycursor.execute(sql, val)
         mydb.commit()
 
-    #st.write('sql Video success')
+    # st.write('sql Video success')
 
-    sql = "TRUNCATE TABLE  Channel_2_comments"
+    sql = "DELETE FROM Channel_5_comments"
     mycursor.execute(sql)
 
     for i in range(1, len(data_list) - 1):
         if data[data_list[i]]['Comment_Count'] != 0:
-            y=list(data[data_list[i]]['Comments'].values())
+            y = list(data[data_list[i]]['Comments'].values())
 
             for j in range(len(y)):
-                sql = "INSERT INTO  Channel_2_comments(comment_id,video_id,comment_text,comment_author,comment_published_date) VALUES (%s,%s,%s,%s,%s)"
-                val = (y[j]['Comment_Id'],data_list[i],y[j]['Comment_Text'],
+                sql = "INSERT INTO  Channel_5_comments(comment_id,video_id,comment_text,comment_author,comment_published_date) VALUES (%s,%s,%s,%s,%s)"
+                val = (y[j]['Comment_Id'], data_list[i], y[j]['Comment_Text'],
                        y[j]['Comment_Author'], y[j]['Comment_PublishedAt'])
                 mycursor.execute(sql, val)
                 mydb.commit()
@@ -454,28 +444,23 @@ def push_mongo_sql_2(all_data):
             pass
 
 
-
-
 if 'text2' not in st.session_state:
-    st.session_state['text2']=None
+    st.session_state['text2'] = None
 
 text_inputs2 = st.text_input('Enter 2nd channel id')
 if text_inputs2:
     st.session_state.text2 = text_inputs2
 
-#st.session_state['text']
-fetch2=st.button('fetch and store data  of 2nd channel in MongoDB and SQL database')
+# st.session_state['text']
+fetch2 = st.button('fetch and store data  of 2nd channel in MongoDB and SQL database')
 
 if fetch2:
-    input_channel2=st.session_state['text2']
+    input_channel2 = st.session_state['text2']
 
-    all_data= myfun(input_channel2)
+    all_data = myfun(input_channel2)
     push_mongo_sql_2(all_data)
 
-
-
-    #st.button('Push to mongo and sql database server ', on_click=push_mongo_sql(all_data))
-
+    # st.button('Push to mongo and sql database server ', on_click=push_mongo_sql(all_data))
 
 
 def push_mongo_sql_3(all_data):
@@ -488,18 +473,16 @@ def push_mongo_sql_3(all_data):
     x = collection.delete_many({})
 
     collection.insert_one(all_data)
-    #st.write('mongo channel success')
+    # st.write('mongo channel success')
 
-
-    #sql
-    data_list=list(all_data)
+    # sql
+    data_list = list(all_data)
     data = all_data
 
-
-    #for i in range(1, len(data_list)):
+    # for i in range(1, len(data_list)):
     #    st.write(data_list[i])
-    #st.write(data_list)
-    #st.write(data)
+    # st.write(data_list)
+    # st.write(data)
     import mysql.connector
 
     mydb = mysql.connector.connect(
@@ -509,23 +492,22 @@ def push_mongo_sql_3(all_data):
         database="mydatabase"
     )
     mycursor = mydb.cursor()
-    sql = "TRUNCATE TABLE Channel_3"
+    sql = "DELETE FROM Channel_6"
     mycursor.execute(sql)
 
-    sql = "INSERT INTO Channel_3 (channel_id,channel_name,channel_type,channel_views,channel_decription,channel_status) VALUES (%s, %s,%s, %s,%s, %s)"
+    sql = "INSERT INTO Channel_6 (channel_id,channel_name,channel_type,channel_views,channel_decription,channel_status) VALUES (%s, %s,%s, %s,%s, %s)"
     val = (data['Channel_information']['Channel_Id'], data['Channel_information']['Channel_Name'], 'Education',
            data['Channel_information']['Channel_Views'], data['Channel_information']['Channel_Description'], 'active')
     mycursor.execute(sql, val)
 
     mydb.commit()
-    #st.write('sql channel success')
+    # st.write('sql channel success')
 
-
-    sql = "TRUNCATE TABLE  Channel_3_Videos"
+    sql = "DELETE FROM  Channel_6_Videos"
     mycursor.execute(sql)
 
-    for i in range(1, len(data_list)-1):
-        sql = "INSERT INTO  Channel_3_Videos(video_id,playlist_id,video_name ,video_description ,published_date ,view_count,like_count,dislike_count,favorite_count,comment_count,duration,thumbnail,caption_status) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
+    for i in range(1, len(data_list) - 1):
+        sql = "INSERT INTO  Channel_6_Videos(video_id,playlist_id,video_name ,video_description ,published_date ,view_count,like_count,dislike_count,favorite_count,comment_count,duration,thumbnail,caption_status) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
         val = (data[data_list[i]]['Video_Id'], 'none', data[data_list[i]]['Video_Name'],
                data[data_list[i]]['Video_Description'], data[data_list[i]]['PublishedAt'],
                data[data_list[i]]['View_Count'], data[data_list[i]]['Like_Count'], 0,
@@ -535,18 +517,18 @@ def push_mongo_sql_3(all_data):
         mycursor.execute(sql, val)
         mydb.commit()
 
-    #st.write('sql Video success')
+    # st.write('sql Video success')
 
-    sql = "TRUNCATE TABLE Channel_3_comments"
+    sql = "DELETE FROM Channel_6_comments"
     mycursor.execute(sql)
 
     for i in range(1, len(data_list) - 1):
         if data[data_list[i]]['Comment_Count'] != 0:
-            y=list(data[data_list[i]]['Comments'].values())
+            y = list(data[data_list[i]]['Comments'].values())
 
             for j in range(len(y)):
-                sql = "INSERT INTO Channel_3_comments (comment_id,video_id,comment_text,comment_author,comment_published_date) VALUES (%s,%s,%s,%s,%s)"
-                val = (y[j]['Comment_Id'],data_list[i],y[j]['Comment_Text'],
+                sql = "INSERT INTO Channel_6_comments (comment_id,video_id,comment_text,comment_author,comment_published_date) VALUES (%s,%s,%s,%s,%s)"
+                val = (y[j]['Comment_Id'], data_list[i], y[j]['Comment_Text'],
                        y[j]['Comment_Author'], y[j]['Comment_PublishedAt'])
                 mycursor.execute(sql, val)
                 mydb.commit()
@@ -556,58 +538,50 @@ def push_mongo_sql_3(all_data):
             pass
 
 
-
-
 if 'text3' not in st.session_state:
-    st.session_state['text3']=None
+    st.session_state['text3'] = None
 
 text_inputs3 = st.text_input('Enter 3rd channel id ')
 if text_inputs3:
     st.session_state.text3 = text_inputs3
 
-#st.session_state['text']
-fetch3=st.button('fetch and store data  of 3rd channel in MongoDB and SQL database')
+# st.session_state['text']
+fetch3 = st.button('fetch and store data  of 3rd channel in MongoDB and SQL database')
 
 if fetch3:
-    input_channel3=st.session_state['text3']
+    input_channel3 = st.session_state['text3']
 
-    all_data= myfun(input_channel3)
+    all_data = myfun(input_channel3)
     push_mongo_sql_3(all_data)
 
-
-
-    #st.button('Push to mongo and sql database server ', on_click=push_mongo_sql(all_data))
+    # st.button('Push to mongo and sql database server ', on_click=push_mongo_sql(all_data))
 
 mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="Neha1011",
-        database="mydatabase"
+    host="localhost",
+    user="root",
+    passwd="Neha1011",
+    database="mydatabase"
 )
 mycursor1 = mydb.cursor(buffered=True)
 mycursor2 = mydb.cursor(buffered=True)
 mycursor3 = mydb.cursor(buffered=True)
 
-mycursor1.execute("SELECT channel_name FROM Channel_1")
-mycursor2.execute("SELECT channel_name FROM Channel_2")
-mycursor3.execute("SELECT channel_name FROM Channel_3")
+mycursor1.execute("SELECT channel_name FROM Channel_4")
+mycursor2.execute("SELECT channel_name FROM Channel_5")
+mycursor3.execute("SELECT channel_name FROM Channel_6")
 
 channel_name_1 = mycursor1.fetchall()
 channel_name_2 = mycursor2.fetchall()
 channel_name_3 = mycursor3.fetchall()
 
-channel_name_1=str((channel_name_1[-1][-1]))
-channel_name_2=str((channel_name_2[-1][-1]))
-channel_name_3=str((channel_name_3[-1][-1]))
-
-
-
+channel_name_1 = str((channel_name_1[-1][-1]))
+channel_name_2 = str((channel_name_2[-1][-1]))
+channel_name_3 = str((channel_name_3[-1][-1]))
 
 with st.expander("Q.1 Names of all the videos for each channels"):
-
-    mycursor1.execute("SELECT video_name FROM Channel_1_Videos")
-    mycursor2.execute("SELECT video_name FROM Channel_2_Videos")
-    mycursor3.execute("SELECT video_name FROM Channel_3_Videos")
+    mycursor1.execute("SELECT video_name FROM Channel_4_Videos")
+    mycursor2.execute("SELECT video_name FROM Channel_5_Videos")
+    mycursor3.execute("SELECT video_name FROM Channel_6_Videos")
 
     all_videos_name_1 = mycursor1.fetchall()
     all_videos_name_2 = mycursor2.fetchall()
@@ -625,39 +599,31 @@ with st.expander("Q.1 Names of all the videos for each channels"):
     st.table(df2)
     st.table(df3)
 
-
 with st.expander('Q.2 How many videos for each channel.'):
-
-
-    mycursor1.execute("SELECT COUNT(*) FROM Channel_1_Videos")
-    mycursor2.execute("SELECT COUNT(*) FROM Channel_2_Videos")
-    mycursor3.execute("SELECT COUNT(*) FROM Channel_3_Videos")
+    mycursor1.execute("SELECT COUNT(*) FROM Channel_4_Videos")
+    mycursor2.execute("SELECT COUNT(*) FROM Channel_5_Videos")
+    mycursor3.execute("SELECT COUNT(*) FROM Channel_6_Videos")
 
     videos_count_1 = mycursor1.fetchall()
     videos_count_2 = mycursor2.fetchall()
     videos_count_3 = mycursor3.fetchall()
 
-    a =int((videos_count_1[-1][-1]))
-    b =int((videos_count_2[-1][-1]))
-    c =int((videos_count_3[-1][-1]))
+    a = int((videos_count_1[-1][-1]))
+    b = int((videos_count_2[-1][-1]))
+    c = int((videos_count_3[-1][-1]))
 
-    chart_data={'Channel names': [channel_name_1, channel_name_2, channel_name_3],'Number of videos':[a,b,c]}
-
+    chart_data = {'Channel names': [channel_name_1, channel_name_2, channel_name_3], 'Number of videos': [a, b, c]}
 
     data = pd.DataFrame(chart_data)
-    data=data.set_index('Channel names')
-
-
+    data = data.set_index('Channel names')
 
     st.bar_chart(data)
     st.table(chart_data)
 
-
 with st.expander("Q.3 Top 10 most viewed videos on each channel"):
-
-    mycursor1.execute("SELECT video_name,view_count FROM Channel_1_Videos ORDER BY view_count DESC LIMIT 10")
-    mycursor2.execute("SELECT video_name,view_count FROM Channel_2_Videos ORDER BY view_count DESC LIMIT 10")
-    mycursor3.execute("SELECT video_name,view_count FROM Channel_3_Videos ORDER BY view_count DESC LIMIT 10")
+    mycursor1.execute("SELECT video_name,view_count FROM Channel_4_Videos ORDER BY view_count DESC LIMIT 10")
+    mycursor2.execute("SELECT video_name,view_count FROM Channel_5_Videos ORDER BY view_count DESC LIMIT 10")
+    mycursor3.execute("SELECT video_name,view_count FROM Channel_6_Videos ORDER BY view_count DESC LIMIT 10")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -679,13 +645,10 @@ with st.expander("Q.3 Top 10 most viewed videos on each channel"):
     st.table(df2)
     st.table(df3)
 
-
-
 with st.expander("Q.4 How many comments were made on each video for every channel"):
-
-    mycursor1.execute("SELECT video_name,comment_count FROM Channel_1_Videos")
-    mycursor2.execute("SELECT video_name,comment_count FROM Channel_2_Videos")
-    mycursor3.execute("SELECT video_name,comment_count FROM Channel_3_Videos")
+    mycursor1.execute("SELECT video_name,comment_count FROM Channel_4_Videos")
+    mycursor2.execute("SELECT video_name,comment_count FROM Channel_5_Videos")
+    mycursor3.execute("SELECT video_name,comment_count FROM Channel_6_Videos")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -708,10 +671,12 @@ with st.expander("Q.4 How many comments were made on each video for every channe
     st.table(df3)
 
 with st.expander("Q.5 Videos which have the highest number of likes for each channel"):
-
-    mycursor1.execute("SELECT video_name,like_count FROM Channel_1_Videos WHERE  like_count= (SELECT MAX(like_count) FROM Channel_1_Videos)")
-    mycursor2.execute("SELECT video_name,like_count FROM Channel_2_Videos WHERE  like_count= (SELECT MAX(like_count) FROM Channel_2_Videos)")
-    mycursor3.execute("SELECT video_name,like_count FROM Channel_3_Videos WHERE  like_count= (SELECT MAX(like_count) FROM Channel_3_Videos)")
+    mycursor1.execute(
+        "SELECT video_name,like_count FROM Channel_4_Videos WHERE  like_count= (SELECT MAX(like_count) FROM Channel_4_Videos)")
+    mycursor2.execute(
+        "SELECT video_name,like_count FROM Channel_5_Videos WHERE  like_count= (SELECT MAX(like_count) FROM Channel_5_Videos)")
+    mycursor3.execute(
+        "SELECT video_name,like_count FROM Channel_6_Videos WHERE  like_count= (SELECT MAX(like_count) FROM Channel_6_Videos)")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -725,20 +690,16 @@ with st.expander("Q.5 Videos which have the highest number of likes for each cha
     df2['Channel name'] = channel_name_2
     df3['Channel name'] = channel_name_3
 
-
-    df=[df1,df2,df3]
-    df_res=pd.concat(df)
+    df = [df1, df2, df3]
+    df_res = pd.concat(df)
     df_res.columns = ['Video Name', 'No. of likes', 'Channel_name']
-
 
     st.table(df_res)
 
-
 with st.expander("Q.6  Total number of likes and dislikes were made on each video."):
-
-    mycursor1.execute("SELECT video_name,like_count,dislike_count FROM Channel_1_Videos")
-    mycursor2.execute("SELECT video_name,like_count,dislike_count FROM Channel_2_Videos")
-    mycursor3.execute("SELECT video_name,like_count,dislike_count FROM Channel_3_Videos")
+    mycursor1.execute("SELECT video_name,like_count,dislike_count FROM Channel_4_Videos")
+    mycursor2.execute("SELECT video_name,like_count,dislike_count FROM Channel_5_Videos")
+    mycursor3.execute("SELECT video_name,like_count,dislike_count FROM Channel_6_Videos")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -748,9 +709,9 @@ with st.expander("Q.6  Total number of likes and dislikes were made on each vide
     df2 = pd.DataFrame(res_2)
     df3 = pd.DataFrame(res_3)
 
-    df1.columns = ['Video Name', 'like count','dislike count']
-    df2.columns = ['Video Name', 'like count','dislike count']
-    df3.columns = ['Video Name', 'like count','dislike count']
+    df1.columns = ['Video Name', 'like count', 'dislike count']
+    df2.columns = ['Video Name', 'like count', 'dislike count']
+    df3.columns = ['Video Name', 'like count', 'dislike count']
 
     df1 = df1.style.set_caption(channel_name_1)
     df2 = df2.style.set_caption(channel_name_2)
@@ -761,29 +722,26 @@ with st.expander("Q.6  Total number of likes and dislikes were made on each vide
     st.table(df3)
 
 with st.expander("Q.7  Total number of views for each channel"):
-
-    mycursor1.execute("SELECT channel_views FROM Channel_1")
-    mycursor2.execute("SELECT channel_views FROM Channel_2")
-    mycursor3.execute("SELECT channel_views FROM Channel_3")
+    mycursor1.execute("SELECT channel_views FROM Channel_4")
+    mycursor2.execute("SELECT channel_views FROM Channel_5")
+    mycursor3.execute("SELECT channel_views FROM Channel_6")
 
     channel_views_1 = mycursor1.fetchall()
     channel_views_2 = mycursor2.fetchall()
     channel_views_3 = mycursor3.fetchall()
 
-
-    a =int((channel_views_1[-1][-1]))
-    b =int((channel_views_2[-1][-1]))
-    c =int((channel_views_3[-1][-1]))
+    a = int((channel_views_1[-1][-1]))
+    b = int((channel_views_2[-1][-1]))
+    c = int((channel_views_3[-1][-1]))
 
     chart_data = {'Channel names': [channel_name_1, channel_name_2, channel_name_3], 'channel views': [a, b, c]}
 
     st.table(chart_data)
 
 with st.expander("Q.8  Videos  published in the year 2022 for channel"):
-
-    mycursor1.execute("SELECT video_name,published_date FROM Channel_1_Videos")
-    mycursor2.execute("SELECT video_name,published_date  FROM Channel_2_Videos")
-    mycursor3.execute("SELECT video_name,published_date  FROM Channel_3_Videos")
+    mycursor1.execute("SELECT video_name,published_date FROM Channel_4_Videos")
+    mycursor2.execute("SELECT video_name,published_date  FROM Channel_5_Videos")
+    mycursor3.execute("SELECT video_name,published_date  FROM Channel_6_Videos")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -813,12 +771,10 @@ with st.expander("Q.8  Videos  published in the year 2022 for channel"):
     st.table(df2)
     st.table(df3)
 
-
 with st.expander("Q.9  Average duration of videos for each channel"):
-
-    mycursor1.execute("SELECT duration FROM Channel_1_Videos")
-    mycursor2.execute("SELECT duration FROM Channel_2_Videos")
-    mycursor3.execute("SELECT duration FROM Channel_3_Videos")
+    mycursor1.execute("SELECT duration FROM Channel_4_Videos")
+    mycursor2.execute("SELECT duration FROM Channel_5_Videos")
+    mycursor3.execute("SELECT duration FROM Channel_6_Videos")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -832,25 +788,33 @@ with st.expander("Q.9  Average duration of videos for each channel"):
     df2.columns = ['duration']
     df3.columns = ['duration']
 
-    df1['time'] = pd.to_numeric(df1['duration'].str[0:-13])*24*3600 +pd.to_numeric(df1['duration'].str[-8:-6])*3600+ pd.to_numeric(df1['duration'].str[-5:-3])*60 +pd.to_numeric(df1['duration'].str[-2:])*1
-    df2['time'] = pd.to_numeric(df2['duration'].str[0:-13])*24*3600 +pd.to_numeric(df2['duration'].str[-8:-6])*3600 +pd.to_numeric(df2['duration'].str[-5:-3])*60 +pd.to_numeric(df2['duration'].str[-2:])*1
-    df3['time'] = pd.to_numeric(df3['duration'].str[0:-13])*24*3600 +pd.to_numeric(df3['duration'].str[-8:-6])*3600 +pd.to_numeric(df3['duration'].str[-5:-3])*60 +pd.to_numeric(df3['duration'].str[-2:])*1
+    df1['time'] = pd.to_numeric(df1['duration'].str[0:-13]) * 24 * 3600 + pd.to_numeric(
+        df1['duration'].str[-8:-6]) * 3600 + pd.to_numeric(df1['duration'].str[-5:-3]) * 60 + pd.to_numeric(
+        df1['duration'].str[-2:]) * 1
+    df2['time'] = pd.to_numeric(df2['duration'].str[0:-13]) * 24 * 3600 + pd.to_numeric(
+        df2['duration'].str[-8:-6]) * 3600 + pd.to_numeric(df2['duration'].str[-5:-3]) * 60 + pd.to_numeric(
+        df2['duration'].str[-2:]) * 1
+    df3['time'] = pd.to_numeric(df3['duration'].str[0:-13]) * 24 * 3600 + pd.to_numeric(
+        df3['duration'].str[-8:-6]) * 3600 + pd.to_numeric(df3['duration'].str[-5:-3]) * 60 + pd.to_numeric(
+        df3['duration'].str[-2:]) * 1
 
-    a= df1['time'].mean(axis=0)
+    a = df1['time'].mean(axis=0)
     b = df2['time'].mean(axis=0)
     c = df3['time'].mean(axis=0)
-    a=a/60
-    b=b/60
-    c=c/60
-    d={'Channel names': [channel_name_1, channel_name_2, channel_name_3], 'avg duration(minutes)': [a, b, c]}
-    df=pd.DataFrame(d)
+    a = a / 60
+    b = b / 60
+    c = c / 60
+    d = {'Channel names': [channel_name_1, channel_name_2, channel_name_3], 'avg duration(minutes)': [a, b, c]}
+    df = pd.DataFrame(d)
     st.table(d)
 
 with st.expander("Q.10 Videos which have the highest number of comments for each channel names"):
-
-    mycursor1.execute("SELECT video_name,comment_count FROM Channel_1_Videos WHERE  comment_count= (SELECT MAX(comment_count) FROM Channel_1_Videos)")
-    mycursor2.execute("SELECT video_name,comment_count FROM Channel_2_Videos WHERE  comment_count= (SELECT MAX(comment_count) FROM Channel_2_Videos)")
-    mycursor3.execute("SELECT video_name,comment_count FROM Channel_3_Videos WHERE  comment_count= (SELECT MAX(comment_count) FROM Channel_3_Videos)")
+    mycursor1.execute(
+        "SELECT video_name,comment_count FROM Channel_4_Videos WHERE  comment_count= (SELECT MAX(comment_count) FROM Channel_4_Videos)")
+    mycursor2.execute(
+        "SELECT video_name,comment_count FROM Channel_5_Videos WHERE  comment_count= (SELECT MAX(comment_count) FROM Channel_5_Videos)")
+    mycursor3.execute(
+        "SELECT video_name,comment_count FROM Channel_6_Videos WHERE  comment_count= (SELECT MAX(comment_count) FROM Channel_6_Videos)")
 
     res_1 = mycursor1.fetchall()
     res_2 = mycursor2.fetchall()
@@ -864,12 +828,10 @@ with st.expander("Q.10 Videos which have the highest number of comments for each
     df2['Channel name'] = channel_name_2
     df3['Channel name'] = channel_name_3
 
-
-    df=[df1,df2,df3]
-    df_res=pd.concat(df)
+    df = [df1, df2, df3]
+    df_res = pd.concat(df)
     df_res.columns = ['Video Name', 'No. of comments', 'Channel_name']
 
-
-
     st.table(df_res)
+
 
