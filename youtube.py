@@ -9,10 +9,11 @@ def myfun(channel_id):
     from googleapiclient.discovery import build
 
 
-    api_key = 'AIzaSyA8n7PamfdehLVjYuoRCzGw0EzwVvaqZLE'
+    #api_key = 'AIzaSyA8n7PamfdehLVjYuoRCzGw0EzwVvaqZLE'
     #api_key='AIzaSyDS-OUvWtJ11LGWzvm4Oi27AM5mER47K9A'
     #api_key='AIzaSyBhd3i9HXLsoyMn1tqsfoaNlA39NWUBFuk'
     #api_key='AIzaSyCrlJj20i90l6aUoc89EkRg4DVCW0VIVfM'
+    api_key='AIzaSyAKz9fyucB8UMnywr-Sh0NmH391UFjj5Q4'
     youtube = build('youtube', 'v3', developerKey=api_key)
 
 
@@ -245,34 +246,6 @@ def myfun(channel_id):
 #mydata=myfun(channel_id)
 
 st.title('Youtube Channel Data Anaylsis')
-
-# Define the options for the dropdown menu
-options = list(range(2,4))
-# Create the dropdown menu
-selected_option = st.selectbox('Select an option', options)
-
-# Display the selected option
-st.write('You selected:', selected_option)
-
-#C=selected_option
-#text_inputs=[]
-
-#for i in range(selected_option):
-#    text_input = st.text_input(f'Input {i+1}')
-#    text_inputs.append(text_input)
-
-#if len(text_inputs)==1:
-#    channel_id=text_inputs[0]
-#    mydata_1=myfun(channel_id)
-#    channel_name1 = mydata_1['Channel_information']["Channel_Name"]
-#    st.write(channel_name1)
-
-
-
-#channel_name=mydata_1['Channel_information']["Channel_Name"]
-#guvi_channel_id = 'UCiEmtpFVJjpvdhsQ2QAhxVA'  # example channel_ID
-#channel_id = guvi_channel_id
-#st.write(channel_name)
 
 
 def push_mongo_sql_1(all_data):
@@ -577,6 +550,12 @@ channel_name_3 = mycursor3.fetchall()
 channel_name_1 = str((channel_name_1[-1][-1]))
 channel_name_2 = str((channel_name_2[-1][-1]))
 channel_name_3 = str((channel_name_3[-1][-1]))
+
+st.write('First channel name:',channel_name_1)
+st.write('Second channel name:',channel_name_2)
+st.write('Third channel name:',channel_name_3)
+
+st.write('Analysis for three channels')
 
 with st.expander("Q.1 Names of all the videos for each channels"):
     mycursor1.execute("SELECT video_name FROM Channel_4_Videos")
