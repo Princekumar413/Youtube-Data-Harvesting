@@ -462,8 +462,8 @@ channel_name_2 = mycursor2.fetchall()
 channel_name_1 = str((channel_name_1[-1][-1]))
 channel_name_2 = str((channel_name_2[-1][-1]))
 
-st.write(channel_name_1)
-st.write(channel_name_2)
+st.write('First channel name:',channel_name_1)
+st.write('Second channel name:',channel_name_2)
 
 with st.expander("Q.1 Names of all the videos for each channels"):
     mycursor1.execute("SELECT video_name FROM Channel_3_Videos")
